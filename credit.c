@@ -12,7 +12,9 @@ int main(void)
     }
     while (cc_number < 0);
 
-    if (cc_number < 4000000000000 || (cc_number >= 50000000000000 && cc_number < 340000000000000) || (cc_number >= 350000000000000 && cc_number < 370000000000000) || (cc_number >= 380000000000000 && cc_number < 4000000000000000) || (cc_number >= 5000000000000000 && cc_number < 5100000000000000) || cc_number >= 5600000000000000)
+    if (cc_number < 4000000000000 || (cc_number >= 50000000000000 && cc_number < 340000000000000) || (cc_number >= 350000000000000\n
+            && cc_number < 370000000000000) || (cc_number >= 380000000000000 && cc_number < 4000000000000000) || (cc_number >= 5000000000000000\n
+                && cc_number < 5100000000000000) || cc_number >= 5600000000000000)
     {
         printf("INVALID\n");
     }
