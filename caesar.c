@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main (int argc, string argv[])
+int main(int argc, string argv[])
 {
     //Checking for 2 arguments in the command line
     if (argc == 2 && argv[2] >= 0)
