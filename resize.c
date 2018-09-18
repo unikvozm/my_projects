@@ -1,4 +1,4 @@
-// Copies a BMP file
+// Resizes a BMP file
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -82,75 +82,48 @@ int main(int argc, char *argv[])
     // write outfile's BITMAPINFOHEADER
     fwrite(&out_bi, sizeof(BITMAPINFOHEADER), 1, outptr);
 
+    // temporary storage
+    RGBTRIPLE picture[bi.biWidth][abs(bi.biHeight)];
+
     // iterate over infile's scanlines
-    if (f >= 1)
+    for (int i = 0, biHeight = abs(bi.biHeight); i < biHeight; i++)
     {
-        for (int i = 0, biHeight = abs(bi.biHeight); i < biHeight; i++)
+        // iterate over pixels in scanline
+        for (int j = 0; j < bi.biWidth; j++)
         {
-            for (int q = 0; q < floor(f); q++)
-            {
-                //send infile's cursor to the beginning
-                fseek(inptr, sizeof(BITMAPINFOHEADER) + sizeof(BITMAPFILEHEADER) + (bi.biWidth * sizeof(RGBTRIPLE) + padding_in) * i, SEEK_SET);
+            // temporary storage
+            RGBTRIPLE triple;
 
-                // iterate over pixels in scanline
-                for (int j = 0; j < bi.biWidth; j++)
-                {
-                    // temporary storage
-                    RGBTRIPLE triple;
+            // read RGB triple from infile
+            fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
 
-                    // read RGB triple from infile
-                    fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
-
-                    // write RGB triple to outfile
-                    for (int g = 0; g < floor(f); g++)
-                    {
-                        fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
-                    }
-                }
-
-                // skip over padding, if any
-                fseek(inptr, padding_in, SEEK_CUR);
-
-                // then add it back (to demonstrate how)
-                for (int k = 0; k < padding_out; k++)
-                {
-                    fputc(0x00, outptr);
-                }
-            }
+            //store the data in the array
+            picture[j][i] = triple;
         }
+        // skip over padding, if any
+        fseek(inptr, padding_in, SEEK_CUR);
     }
 
-    else
+    //iterate over output's scanline
+    for (int g = 0; g < abs(out_bi.biHeight); g++)
     {
-        int l = 0;
-        while (l < abs(bi.biHeight))
+        // iterate over pixels in scanline
+        for (int h = 0; h < out_bi.biWidth; h++)
         {
-            // iterate over pixels in scanline
-            int m = 0;
-            while (m < bi.biWidth)
-            {
-                // temporary storage
-                RGBTRIPLE triple;
+            // temporary storage
+            RGBTRIPLE triple;
 
-                // read RGB triple from infile
-                fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
+            //go to the right pixel
+            triple = picture[(int) floor(h/f)][(int) floor(g/f)];
 
-                // write RGB triple to outfile
-                fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
+            // write RGB triple to outfile
+            fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
+        }
 
-                m += floor(bi.biWidth / out_bi.biWidth);
-            }
-
-            // skip over padding, if any
-            fseek(inptr, padding_in, SEEK_CUR);
-
-            // then add it back (to demonstrate how)
-            for (int k = 0; k < padding_out; k++)
-            {
-                fputc(0x00, outptr);
-            }
-
-            l += floor(bi.biHeight / out_bi.biHeight);
+        // add padding
+        for (int k = 0; k < padding_out; k++)
+        {
+            fputc(0x00, outptr);
         }
     }
 
