@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
             RGBTRIPLE triple;
 
             //go to the right pixel
-            triple = picture[(int) floor(h/f)][(int) floor(g/f)];
+            triple = picture[(int) floor(h / f)][(int) floor(g / f)];
 
             // write RGB triple to outfile
             fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
