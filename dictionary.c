@@ -92,20 +92,12 @@ bool load(const char *dictionary)
     FILE *inptr = fopen(dictionary, "r");
     if (inptr == NULL)
     {
+        fclose(inptr);
         return false;
     }
 
     //default values
-    root = malloc(sizeof(node));
-    if (root == NULL)
-    {
-        return false;
-    }
-    root -> is_word = false;
-    for (int k = 0; k < 27; k++)
-    {
-        root -> children[k] = NULL;
-    }
+    root = (node *) calloc(8, sizeof(node));
     int i; //the exact place in children
 
     //create a traverse pointer
@@ -140,15 +132,7 @@ bool load(const char *dictionary)
             else
             {
                 //malloc a new node, have children[i] point to it
-                trav -> children[i] = malloc(sizeof(node));
-                if (trav -> children[i] == NULL)
-                {
-                    return false;
-                }
-                for (int k = 0; k < 27; k++)
-                {
-                    trav -> children[k] = NULL;
-                }
+                trav -> children[i] = (node *) calloc(8, sizeof(node));
                 trav = trav -> children[i];
             }
         }
@@ -173,12 +157,7 @@ unsigned int size(void)
 bool unload(void)
 {
     // TODO
-    for (int i = 0; i < 27; i++)
-    {
-        if (root -> children[i] != NULL)
-        {
-            freetrie(root -> children[i]);
-        }
-    }
+    node *trav = root;
+    freetrie(trav);
     return true;
 }
