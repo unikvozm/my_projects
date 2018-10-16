@@ -43,7 +43,8 @@ bool check(const char *word)
     node *trav = root;
 
     //for each letter in input word
-    for (int j = 0; j < strlen(word); j++)
+    int n = strlen(word);
+    for (int j = 0; j < n; j++)
     {
         //find the place of a letter
         if (word[j] == '\'')
