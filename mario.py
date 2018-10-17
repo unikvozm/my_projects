@@ -5,11 +5,11 @@ while True:
     if n >= 0 and n <= 23:
         break
 
-#Print out this many rows
+# Print out this many rows
 for i in range(n):
-    #Print out this many column
+    # Print out this many column
     for j in range(n - i - 1):
-        print(" ", end = "")
-    for k in range(i+2):
-        print("#", end = "")
+        print(" ", end="")
+    for k in range(i + 2):
+        print("#", end="")
     print()
